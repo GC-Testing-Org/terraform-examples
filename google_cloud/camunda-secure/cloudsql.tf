@@ -7,7 +7,11 @@ resource "google_sql_database_instance" "camunda-db" {
     # Very small instance for testing.
     tier = "db-f1-micro"
     ip_configuration {
-        ipv4_enabled = true
+      ipv4_enabled = true
+      ssl_mode     = "ENCRYPTED_ONLY"
+    }
+    backup_configuration {
+      enabled = true
     }
   }
 }
