@@ -51,14 +51,14 @@ resource "aws_cloudfront_distribution" "this" {
     # Note: This will make the Lambda undeletable, as long as this distribution/association exists
     # https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/lambda-edge-delete-replicas.html
     lambda_function_association {
-      event_type = "viewer-request"                                                                          # one of [ viewer-request, origin-request, viewer-response, origin-response ]
+      event_type = "viewer-request" # one of [ viewer-request, origin-request, viewer-response, origin-response ]
       lambda_arn = "${aws_lambda_function.viewer_request.arn}:${aws_lambda_function.viewer_request.version}"
     }
 
     # Note: This will make the Lambda undeletable, as long as this distribution/association exists
     # https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/lambda-edge-delete-replicas.html
     lambda_function_association {
-      event_type = "viewer-response"                                                                           # one of [ viewer-request, origin-request, viewer-response, origin-response ]
+      event_type = "viewer-response" # one of [ viewer-request, origin-request, viewer-response, origin-response ]
       lambda_arn = "${aws_lambda_function.viewer_response.arn}:${aws_lambda_function.viewer_response.version}"
     }
   }
@@ -68,57 +68,57 @@ resource "aws_cloudfront_distribution" "this" {
   # Unless a "cache_ttl_override" is provided, we never cache errors.
   # https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/custom-error-pages-expiration.html
   custom_error_response {
-    error_code            = 400                  # == "Bad Request"
+    error_code            = 400 # == "Bad Request"
     error_caching_min_ttl = "${local.error_ttl}"
   }
 
   custom_error_response {
-    error_code            = 403                  # == "Forbidden"
+    error_code            = 403 # == "Forbidden"
     error_caching_min_ttl = "${local.error_ttl}"
   }
 
   custom_error_response {
-    error_code            = 404                  # == "Not Found"
+    error_code            = 404 # == "Not Found"
     error_caching_min_ttl = "${local.error_ttl}"
   }
 
   custom_error_response {
-    error_code            = 405                  # == "Method Not Allowed"
+    error_code            = 405 # == "Method Not Allowed"
     error_caching_min_ttl = "${local.error_ttl}"
   }
 
   custom_error_response {
-    error_code            = 414                  # == "Request-URI Too Long"
+    error_code            = 414 # == "Request-URI Too Long"
     error_caching_min_ttl = "${local.error_ttl}"
   }
 
   custom_error_response {
-    error_code            = 416                  # == "Requested Range Not Satisfiable"
+    error_code            = 416 # == "Requested Range Not Satisfiable"
     error_caching_min_ttl = "${local.error_ttl}"
   }
 
   custom_error_response {
-    error_code            = 500                  # == "Internal Server Error"
+    error_code            = 500 # == "Internal Server Error"
     error_caching_min_ttl = "${local.error_ttl}"
   }
 
   custom_error_response {
-    error_code            = 501                  # == "Not Implemented"
+    error_code            = 501 # == "Not Implemented"
     error_caching_min_ttl = "${local.error_ttl}"
   }
 
   custom_error_response {
-    error_code            = 502                  # == "Bad Gateway"
+    error_code            = 502 # == "Bad Gateway"
     error_caching_min_ttl = "${local.error_ttl}"
   }
 
   custom_error_response {
-    error_code            = 503                  # == "Service Unavailable"
+    error_code            = 503 # == "Service Unavailable"
     error_caching_min_ttl = "${local.error_ttl}"
   }
 
   custom_error_response {
-    error_code            = 504                  # == "Gateway Timeout"
+    error_code            = 504 # == "Gateway Timeout"
     error_caching_min_ttl = "${local.error_ttl}"
   }
 
@@ -136,4 +136,5 @@ resource "aws_cloudfront_distribution" "this" {
     ssl_support_method       = "sni-only"
     minimum_protocol_version = "TLSv1.1_2016"
   }
+  retain_on_delete = true
 }
