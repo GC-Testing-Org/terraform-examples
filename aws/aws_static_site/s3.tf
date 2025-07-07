@@ -28,7 +28,7 @@ resource "aws_s3_bucket" "this" {
 # $ aws s3 cp --acl public-read ...
 # https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html#canned-acl
 resource "aws_s3_bucket_policy" "this" {
-  depends_on = ["aws_s3_bucket.this"]                      # because we refer to the bucket indirectly, we need to explicitly define the dependency
+  depends_on = ["aws_s3_bucket.this"] # because we refer to the bucket indirectly, we need to explicitly define the dependency
   count      = "${var.bucket_override_name == "" ? 1 : 0}"
   bucket     = "${local.bucket_name}"
 
@@ -51,4 +51,14 @@ resource "aws_s3_bucket_policy" "this" {
   ]
 }
 POLICY
+}
+resource "aws_s3_bucket_public_access_block" "my_aws_s3_bucket_public_access_block_aws_s3_bucket_this" {
+  bucket             = aws_s3_bucket.this.id
+  ignore_public_acls = true
+}
+resource "aws_s3_bucket_versioning" "my_aws_s3_bucket_versioning_aws_s3_bucket_this" {
+  bucket = aws_s3_bucket.this.id
+  versioning_configuration {
+    status = "Enabled"
+  }
 }
