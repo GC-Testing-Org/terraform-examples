@@ -26,6 +26,7 @@ resource "aws_s3_bucket_public_access_block" "website_bucket" {
 
   block_public_acls   = true
   block_public_policy = true
+  ignore_public_acls  = true
 }
 
 data "aws_iam_policy_document" "s3_policy_document" {
@@ -136,6 +137,7 @@ resource "aws_cloudfront_distribution" "this" {
     error_caching_min_ttl = var.error_ttl
   }
 
+  retain_on_delete = true
 }
 
 
@@ -164,5 +166,11 @@ resource "aws_route53_record" "ipv6" {
     name                   = aws_cloudfront_distribution.this.domain_name
     zone_id                = aws_cloudfront_distribution.this.hosted_zone_id
     evaluate_target_health = false
+  }
+}
+resource "aws_s3_bucket_versioning" "my_aws_s3_bucket_versioning_aws_s3_bucket_this" {
+  bucket = aws_s3_bucket.this.id
+  versioning_configuration {
+    status = "Enabled"
   }
 }
