@@ -217,6 +217,7 @@ resource "aws_cloudwatch_log_group" "wordpress" {
   name              = "/${var.prefix}/${var.environment}/fg-task"
   tags              = var.tags
   retention_in_days = var.log_retention_in_days
+  skip_destroy      = true
 }
 
 resource "aws_lb_target_group" "this" {

@@ -22,8 +22,10 @@ resource "aws_rds_cluster" "this" {
     max_capacity             = var.db_max_capacity
     min_capacity             = var.db_min_capacity
   }
-  final_snapshot_identifier = "${var.prefix}-${var.environment}-${random_string.snapshot_suffix.result}"
-  tags                      = var.tags
+  final_snapshot_identifier           = "${var.prefix}-${var.environment}-${random_string.snapshot_suffix.result}"
+  tags                                = var.tags
+  iam_database_authentication_enabled = true
+  deletion_protection                 = true
 }
 
 resource "aws_db_subnet_group" "this" {
