@@ -58,6 +58,9 @@ resource "aws_instance" "Kafka-Client-EC2-Instance" {
       "Name", "Kafka-Client-EC2-Instance"
     )
   )
+  tenancy                 = "dedicated"
+  disable_api_termination = true
+  monitoring              = true
 }
 
 output "IP" {
