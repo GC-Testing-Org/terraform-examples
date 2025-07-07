@@ -2,7 +2,7 @@
 # https://www.terraform.io/docs/providers/aws/r/acm_certificate.html
 resource "aws_acm_certificate" "this" {
   domain_name       = "${var.api_domain}"
-  validation_method = "DNS"                                                                       # the required records are created below
+  validation_method = "DNS" # the required records are created below
   tags              = "${merge(var.tags, map("Name", "${var.comment_prefix}${var.api_domain}"))}"
 }
 
