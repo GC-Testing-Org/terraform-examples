@@ -47,7 +47,7 @@ locals {
   # through the Cloud Console mobile app or https://console.cloud.google.com
   # Create a group at https://groups.google.com/forum/#!creategroup
   # and invite members by their email address.
-  enable_switch_access_group = 1
+  enable_switch_access_group    = 1
   minecraft_switch_access_group = "minecraft-switchers-lark@googlegroups.com"
 }
 
@@ -96,7 +96,7 @@ resource "google_compute_instance" "minecraft" {
   metadata = {
     enable-oslogin = "TRUE"
   }
-      
+
   boot_disk {
     auto_delete = false # Keep disk after shutdown (game data)
     source      = google_compute_disk.minecraft.self_link
@@ -118,6 +118,7 @@ resource "google_compute_instance" "minecraft" {
     preemptible       = true # Closes within 24 hours (sometimes sooner)
     automatic_restart = false
   }
+  can_ip_forward = false
 }
 
 # Create a private network so the minecraft instance cannot access
@@ -163,23 +164,23 @@ resource "google_project_iam_custom_role" "instanceLister" {
 }
 
 resource "google_compute_instance_iam_member" "switcher" {
-  count = local.enable_switch_access_group
-  project = local.project
-  zone = local.zone
+  count         = local.enable_switch_access_group
+  project       = local.project
+  zone          = local.zone
   instance_name = google_compute_instance.minecraft.name
-  role = google_project_iam_custom_role.minecraftSwitcher.id
-  member = "group:${local.minecraft_switch_access_group}"
+  role          = google_project_iam_custom_role.minecraftSwitcher.id
+  member        = "group:${local.minecraft_switch_access_group}"
 }
 
 resource "google_project_iam_member" "projectBrowsers" {
-  count = local.enable_switch_access_group
+  count   = local.enable_switch_access_group
   project = local.project
   role    = "roles/browser"
   member  = "group:${local.minecraft_switch_access_group}"
 }
 
 resource "google_project_iam_member" "computeViewer" {
-  count = local.enable_switch_access_group
+  count   = local.enable_switch_access_group
   project = local.project
   role    = google_project_iam_custom_role.instanceLister.id
   member  = "group:${local.minecraft_switch_access_group}"
