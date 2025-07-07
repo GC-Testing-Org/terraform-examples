@@ -24,11 +24,12 @@ EOF
 
 # Allow API Gateway to invoke our functions:
 resource "aws_lambda_permission" "this" {
-  statement_id  = "AllowAPIGatewayInvoke"
-  action        = "lambda:InvokeFunction"
-  function_name = "${local.function_arn}"
-  principal     = "apigateway.amazonaws.com"
-  source_arn    = "${aws_api_gateway_stage.this.execution_arn}/*/*" # the /*/* portion grants access from any method on any resource within the API Gateway "REST API"
+  statement_id           = "AllowAPIGatewayInvoke"
+  action                 = "lambda:InvokeFunctionUrl"
+  function_name          = "${local.function_arn}"
+  principal              = "apigateway.amazonaws.com"
+  source_arn             = "${aws_api_gateway_stage.this.execution_arn}/*/*" # the /*/* portion grants access from any method on any resource within the API Gateway "REST API"
+  function_url_auth_type = "AWS_IAM"
 }
 
 # Allow writing logs to CloudWatch from our functions:
