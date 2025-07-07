@@ -19,6 +19,9 @@ resource "aws_lambda_function" "local_zipfile" {
   environment {
     variables = "${var.function_env_vars}"
   }
+  tracing_config {
+    mode = "Active"
+  }
 }
 
 # This aws_lambda_function is used when invoked with a zipfile in S3
@@ -41,6 +44,9 @@ resource "aws_lambda_function" "s3_zipfile" {
 
   environment {
     variables = "${var.function_env_vars}"
+  }
+  tracing_config {
+    mode = "Active"
   }
 }
 
