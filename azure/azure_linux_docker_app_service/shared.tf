@@ -23,9 +23,10 @@ resource "azurerm_key_vault" "current" {
 
   soft_delete_enabled        = true
   soft_delete_retention_days = 7
-  purge_protection_enabled   = false
+  purge_protection_enabled   = true
 
-  sku_name = "standard"
+  sku_name                      = "standard"
+  public_network_access_enabled = false
 }
 
 resource "azurerm_container_registry" "current" {
@@ -35,7 +36,8 @@ resource "azurerm_container_registry" "current" {
   sku                 = "Standard"
 
   # We'll be using AD login
-  admin_enabled = false
+  admin_enabled                 = false
+  public_network_access_enabled = false
 }
 
 resource "azurerm_application_insights" "current" {
@@ -43,4 +45,5 @@ resource "azurerm_application_insights" "current" {
   resource_group_name = data.azurerm_resource_group.current.name
   location            = data.azurerm_resource_group.current.location
   application_type    = var.app_insights_app_type
+  tags                = "null"
 }
