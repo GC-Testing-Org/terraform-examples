@@ -1,10 +1,11 @@
 resource "aws_cloudwatch_log_group" "cloudwatch_log_group" {
-  name = "msk_cluster_cloudwatch_group-${random_uuid.randuuid.result}"
+  name         = "msk_cluster_cloudwatch_group-${random_uuid.randuuid.result}"
+  skip_destroy = true
 }
 
 resource "aws_msk_configuration" "msk_cluster_config" {
-  kafka_versions = [var.msk_cluster_version]
-  name           = "msk-${lower(var.environment)}-cluster-cfg-${random_uuid.randuuid.result}"
+  kafka_versions    = [var.msk_cluster_version]
+  name              = "msk-${lower(var.environment)}-cluster-cfg-${random_uuid.randuuid.result}"
   server_properties = <<PROPERTIES
 auto.create.topics.enable = true
 delete.topic.enable = true
@@ -36,14 +37,15 @@ resource "aws_msk_cluster" "msk_cluster" {
   }
 */
 
-configuration_info {
-  arn = aws_msk_configuration.msk_cluster_config.arn
-  revision = 1
-}
+  configuration_info {
+    arn      = aws_msk_configuration.msk_cluster_config.arn
+    revision = 1
+  }
   encryption_info {
     encryption_in_transit {
       client_broker = var.encryption_type
     }
+    encryption_at_rest_kms_key_arn = "null"
   }
 
   enhanced_monitoring = var.monitoring_type
