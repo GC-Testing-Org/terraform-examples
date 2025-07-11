@@ -138,7 +138,7 @@ resource "aws_cloudfront_distribution" "this" {
   depends_on = [
     aws_ecs_service.this
   ]
+  retain_on_delete = true
 }
-
 
 
