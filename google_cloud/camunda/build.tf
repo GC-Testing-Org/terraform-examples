@@ -19,14 +19,14 @@ resource "local_file" "dockerfile" {
 # Hydrate bpm-platform config into .build directory
 resource "local_file" "bpm-platform" {
   content = templatefile("${path.module}/config/bpm-platform.xml.template", {
-    maxJobsPerAcquisition = null
-    lockTimeInMillis = null
-    waitTimeInMillis = 1
-    maxWait = null
-    history = "none"
-    databaseSchemaUpdate = null # default
-    authorizationEnabled = null # default
-    jobExecutorDeploymentAware = "false"
+    maxJobsPerAcquisition              = null
+    lockTimeInMillis                   = null
+    waitTimeInMillis                   = 1
+    maxWait                            = null
+    history                            = "none"
+    databaseSchemaUpdate               = null # default
+    authorizationEnabled               = null # default
+    jobExecutorDeploymentAware         = "false"
     historyCleanupBatchWindowStartTime = null # default
   })
   filename = "${path.module}/.build/bpm-platform.xml"
@@ -42,7 +42,7 @@ resource "null_resource" "camunda_cloudsql_image" {
     image = "eu.gcr.io/${local.project}/camunda_cloudsql:${local.config.base_image_tag}_${
       sha1(
         "${sha1(local_file.dockerfile.content)}${sha1(local_file.bpm-platform.content)}"
-      )  
+      )
     }"
   }
   provisioner "local-exec" {
