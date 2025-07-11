@@ -67,9 +67,10 @@ resource "aws_cloudwatch_event_target" "this" {
 }
 
 resource "aws_lambda_permission" "this" {
-  statement_id  = "${local.prefix_with_name}---scheduled-invocation"
-  action        = "lambda:InvokeFunction"
-  function_name = "${local.function_id}"
-  principal     = "events.amazonaws.com"
-  source_arn    = "${aws_cloudwatch_event_rule.this.arn}"
+  statement_id           = "${local.prefix_with_name}---scheduled-invocation"
+  action                 = "lambda:InvokeFunctionUrl"
+  function_name          = "${local.function_id}"
+  principal              = "events.amazonaws.com"
+  source_arn             = "${aws_cloudwatch_event_rule.this.arn}"
+  function_url_auth_type = "AWS_IAM"
 }
