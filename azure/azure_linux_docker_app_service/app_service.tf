@@ -52,6 +52,8 @@ resource "azurerm_app_service" "current" {
     min_tls_version           = local.app_service_site_config.min_tls_version
     health_check_path         = local.app_service_site_config.health_check_path
     use_32_bit_worker_process = local.app_service_site_config.use_32_bit_worker_process
+    remote_debugging_enabled  = false
+    http2_enabled             = true
   }
 
   app_settings = local.app_service_settings
@@ -85,6 +87,9 @@ resource "azurerm_app_service" "current" {
   # Configure if you need EasyAuth
   # auth_settings {
   # }
+  auth_settings {
+    enabled = true
+  }
 }
 
 # Deployment slot for better availability during deployments
