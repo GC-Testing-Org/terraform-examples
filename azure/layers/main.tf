@@ -43,12 +43,33 @@ resource "azurerm_resource_group" "storage" {
 }
 
 resource "azurerm_storage_account" "storage" {
-  name                      = "${var.resource_name_prefix}storage"
-  resource_group_name       = azurerm_resource_group.storage.name
-  location                  = var.location
-  account_tier              = "Standard"
-  account_replication_type  = "LRS"
-  enable_https_traffic_only = true
+  name                              = "${var.resource_name_prefix}storage"
+  resource_group_name               = azurerm_resource_group.storage.name
+  location                          = var.location
+  account_tier                      = "Standard"
+  account_replication_type          = "LRS"
+  enable_https_traffic_only         = true
+  infrastructure_encryption_enabled = true
+  allow_nested_items_to_be_public   = false
+  public_network_access_enabled     = false
+  https_traffic_only_enabled        = true
+  tags                              = "null"
+  blob_properties {
+    versioning_enabled = true
+    delete_retention_policy {
+      permanent_delete_enabled = false
+    }
+  }
+  queue_properties {
+    minute_metrics {
+      retention_policy_days = "30"
+    }
+    logging {
+      read   = true
+      delete = true
+      write  = true
+    }
+  }
 }
 
 resource "azurerm_storage_container" "storage" {
@@ -63,4 +84,8 @@ resource "azurerm_storage_blob" "a_file" {
   storage_container_name = azurerm_storage_container.storage.name
   type                   = "Block"
   source_content         = "Hello, Blob!"
+}
+resource "azurerm_storage_encryption_scope" "my_azurerm_storage_encryption_scope_azurerm_storage_account_storage" {
+  storage_account_id = azurerm_storage_account.storage.id
+  source             = "Microsoft.Storage"
 }
